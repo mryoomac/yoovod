@@ -1,7 +1,8 @@
-FROM node:12-alpine
+FROM node:12-alpine As development
 # Adding build tools to make yarn install work on Apple silicon / arm64 machines
-RUN apk add --no-cache python3 g++ make
-WORKDIR /app
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install -g ts-node
+RUN npm install
 COPY . .
-RUN yarn install --production
-CMD ["node", "src/main.ts"]
+CMD [ "npm","start"]
