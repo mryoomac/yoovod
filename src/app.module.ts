@@ -17,8 +17,8 @@ import { InvoiceModule } from './invoice/invoice.module';
 import { MovieModule } from './movie/movie.module';
 import { OrderModule } from './order/order.module';
 import { ShoppingBasketModule } from './shopping-basket/shopping-basket.module';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Actor } from './actor/actor.entity';
 
 @Module({
   imports: [
@@ -30,16 +30,17 @@ import { Actor } from './actor/actor.entity';
     MovieModule,
     OrderModule,
     ShoppingBasketModule,
+    ConfigModule.forRoot({ isGlobal: true}),
     TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'root',
-      database: 'vod',
-      entities: [Actor],
+      type: 'postgres',
+      host: process.env.POSTGRES_HOST,
+      port: parseInt(<string>process.env.POSTGRES_PORT),
+      username: process.env.POSTGRES_USERNAME,
+      password: process.env.POSTGRES_PASSWORD,
+      database: process.env.POSTGRES_DATABASE,
+      autoLoadEntities: true,
       synchronize: true,
-    }),
+    })
   ],
   controllers: [
     AppController,
